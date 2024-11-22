@@ -9,6 +9,7 @@ dependencies = [
     "langchain-openai>=0.2.9",
     "pydantic>=2.10.1",
     "pydantic-settings>=2.6.1",
+    "gradio>=5.6.0",
 ]
 requires-python = "==3.13.*"
 readme = "README.md"
@@ -22,4 +23,6 @@ distribution = false
 start = "python -m salon"
 
 [tool.pdm.dev-dependencies]
-dev = ["salon @ file:///${PROJECT_ROOT}/"]
+dev = [
+    "-e file:///${PROJECT_ROOT}/#egg=salon",
+]

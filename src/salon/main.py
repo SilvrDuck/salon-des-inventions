@@ -1,5 +1,10 @@
-from langchain_openai import ChatOpenAI
-from salon_des_inventions.config import config
+from salon.config import config
+from salon import chatbot
+import gradio as gr
 
-llm = ChatOpenAI()
-llm.invoke("Hello, world!")
+def get_response(text, history):
+    return chatbot.get_response(text)
+
+
+demo = gr.ChatInterface(fn=get_response, type="messages")
+demo.launch()
