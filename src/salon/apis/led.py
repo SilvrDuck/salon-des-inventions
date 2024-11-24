@@ -1,6 +1,8 @@
 from enum import Enum
 
 from pydantic import BaseModel, Field
+from langchain_core.tools import StructuredTool
+
 
 
 class LedColor(Enum):
@@ -32,3 +34,10 @@ class PostLedUpdateArgs(BaseModel):
 def post_led_update(update: PostLedUpdateArgs) -> str:
     return str(update)
 
+ledUpdateTool = StructuredTool.from_function(
+    func=post_led_update,
+    name="LedUpdate",
+    description="Update LED colors",
+    args_schema=PostLedUpdateArgs,
+    return_direct=True,
+)

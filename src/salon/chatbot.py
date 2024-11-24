@@ -1,23 +1,15 @@
-from langchain_core.messages import HumanMessage, SystemMessage, BaseMessage, ChatMessage
-from langchain_core.tools import StructuredTool
+from langchain_core.messages import ChatMessage
+
 from langchain_openai import ChatOpenAI
 
-from salon.led_api import PostLedUpdateArgs, post_led_update
+from salon.apis.led import ledUpdateTool
 
 llm = ChatOpenAI(model="gpt-4o")
 
 
-ledUpdateTool = StructuredTool.from_function(
-    func=post_led_update,
-    name="LedUpdate",
-    description="Update LED colors",
-    args_schema=PostLedUpdateArgs,
-    return_direct=True,
-)
+llm_led = llm.bind_tools([ledUpdateTool], tool_choice=ledUpdateTool.name)
 
-llm_led = llm.bind_tools([ledUpdateTool], tool_choice="LedUpdate")
-
-chain = llm_led | (lambda x: x.tool_calls[0]["args"]) | post_led_update
+chain = llm_led | (lambda x: x.tool_calls[0]["args"]) | ledUpdateTool.func
 
 system = ChatMessage(
     role="system",

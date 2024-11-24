@@ -9,4 +9,7 @@ class Config(BaseSettings):
     langchain_api_key: str = "__set_in_dotenv__"
     langchain_project: str = "__set_in_dotenv__"
 
+    # Youtube API
+    youtube_api_key: str = "__set_in_dotenv__"
+
 config = Config(_env_file='.env', _env_file_encoding='utf-8')
