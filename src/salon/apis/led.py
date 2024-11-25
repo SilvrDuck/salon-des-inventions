@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Literal
 
 from pydantic import BaseModel, Field
 from langchain_core.tools import StructuredTool
@@ -18,6 +19,7 @@ class LedColor(Enum):
 class ColorTime(BaseModel):
     color: LedColor = Field(description="Color to display. Use 'black' to turn off the LED.")
     time: int = Field(description="Time in milliseconds to display color. Must be greater than 0.")
+    transation: Literal["solid", "fade"] = Field(description="Type of transition to use. 'solid' will instantly change to the color, 'fade' will fade to the color over the specified time.")
 
 class ColorPattern(BaseModel):
     colors: list[ColorTime] = Field(description=(

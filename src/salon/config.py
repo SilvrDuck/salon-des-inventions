@@ -12,4 +12,7 @@ class Config(BaseSettings):
     # Youtube API
     youtube_api_key: str = "__set_in_dotenv__"
 
+    # Openai
+    openai_api_key: str = "__set_in_dotenv__"
+
 config = Config(_env_file='.env', _env_file_encoding='utf-8')
