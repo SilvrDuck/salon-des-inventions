@@ -6,6 +6,9 @@ __pycache__/
 .vscode/settings.json
 .gradio
 
+crx/*
+!crx/README.md
+
 # C extensions
 *.so
 
