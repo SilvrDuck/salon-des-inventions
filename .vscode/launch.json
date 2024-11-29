@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/.venv/bin/gradio",
             "args": [
-                "src/salon/main.py"
+                "src/salon/chat/main.py"
             ],
             "jinja": true
         }
