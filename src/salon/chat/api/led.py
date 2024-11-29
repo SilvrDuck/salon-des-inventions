@@ -34,6 +34,7 @@ class PostLedUpdateArgs(BaseModel):
     ambient_led: ColorPattern = Field(description="Ambient LED")
 
 def post_led_update(update: PostLedUpdateArgs) -> str:
+    update = PostLedUpdateArgs(**update)
     return str(update)
 
 ledUpdateTool = StructuredTool.from_function(
