@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:db76692e4a5fd64ac4777a1f318b89c7e085dc8f3aecb52987521c70634cab89"
+content_hash = "sha256:077801997e3b6ada31aae169f7955d7b03b06c29d2cf934a187c1633d05ce3ae"
 
 [[metadata.targets]]
 requires_python = "==3.13.*"
@@ -79,6 +79,20 @@ dependencies = [
 files = [
     {file = "aiosignal-1.3.1-py3-none-any.whl", hash = "sha256:f8376fb07dd1e86a584e4fcdec80b36b7f81aac666ebc724e2c090300dd83b17"},
     {file = "aiosignal-1.3.1.tar.gz", hash = "sha256:54cd96e15e1649b75d6c87526a6ff0b6c1b0dd3459f43d9ca11d48c339b68cfc"},
+]
+
+[[package]]
+name = "aiotube"
+version = "1.7.2"
+requires_python = ">=3.8.0"
+summary = "Access YouTube Public Data without YouTube API"
+groups = ["default"]
+dependencies = [
+    "urllib3",
+]
+files = [
+    {file = "aiotube-1.7.2-py3-none-any.whl", hash = "sha256:c3cd55a8ddea17d15b6a45e44a19f9e342b8cc2801cf757ba20aea478c0aca41"},
+    {file = "aiotube-1.7.2.tar.gz", hash = "sha256:398201e751323d690f600ca6493ddbedceda3864b22f4177dc69b80d29cd9e8a"},
 ]
 
 [[package]]
@@ -1271,6 +1285,7 @@ dependencies = [
     "langchain-openai>=0.2.9",
     "langchain>=0.3.7",
     "langgraph>=0.2.53",
+    "openai==1.55.3",
     "pydantic-settings>=2.6.1",
     "pydantic>=2.10.1",
     "selenium>=4.27.1",

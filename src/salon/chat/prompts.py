@@ -39,7 +39,7 @@ YOUTUBE_SELECTOR_SUBSUBSYSTEM = ChatMessage(
 
     Based on the user query AND the presented structured data, you will select the best video(s) to play.
 
-    Please return a list of videoId for all the videos you think are relevant.
+    Please return a list of videoId for all the videos you think are relevant. In the case of music songs, please do not put two times the same song in the list (including any variations), unless it is explicitely asked by the user.
 
     Please sort them by putting first the best one according to the query.
     """,

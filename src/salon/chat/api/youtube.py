@@ -48,8 +48,11 @@ def _filter_relevant_info(info: dict) -> dict:
     items = info["items"]
     return {
         item["id"]: {
-            "snippet": item["snippet"],
-            "duration": item["contentDetails"]["duration"],
+            "title": item["snippet"].get("title", ""),
+            "description": item["snippet"].get("description", ""),
+            "channelTitle": item["snippet"].get("channelTitle", ""),
+            "tags": item["snippet"].get("tags", []),
+            "duration": item["contentDetails"].get("duration", ""),
         }
         for item in items
     }

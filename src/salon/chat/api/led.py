@@ -7,6 +7,7 @@ from langchain_core.tools import StructuredTool
 
 
 class LedColor(Enum):
+    # native for strips
     red = "red"
     green = "green"
     blue = "blue"
@@ -15,6 +16,9 @@ class LedColor(Enum):
     purple = "purple"
     yellow = "yellow"
     cyan = "cyan"
+    # others
+    pink = "pink"
+
 
 class ColorTime(BaseModel):
     color: LedColor = Field(description="Color to display. Use 'black' to turn off the LED.")
