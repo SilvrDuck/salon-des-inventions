@@ -1,12 +1,11 @@
 import asyncio
 import time
 
-import aiotube
 import httpx
-from aiotube.video import Video as AiotubeVideo
 from langchain_core.tools import StructuredTool
 from pydantic import BaseModel, Field
 
+from salon.anothertube.search import search_videos_with_metadata
 from salon.config import config
 
 YT_API = "https://www.googleapis.com/youtube/v3/"
@@ -69,20 +68,20 @@ async def _aget_video_info_from_query(query: str) -> dict:
     return _afilter_relevant_info(info)
 
 
-
-def _extract_relevant_info(videos: AiotubeVideo) -> dict:
-    raise NotImplementedError("This function is not implemented yet")
-    items = info["items"]
+def _extract_relevant_info(videos) -> dict:
     return {
-        item["id"]: {
-            "title": item["snippet"].get("title", ""),
-            "description": item["snippet"].get("description", ""),
-            "channelTitle": item["snippet"].get("channelTitle", ""),
-            "tags": item["snippet"].get("tags", []),
-            "duration": item["contentDetails"].get("duration", ""),
+        (meta := video.metadata)["id"]: {
+            "title": meta.get("title", ""),
+            "views": meta.get("views", ""),
+            "duration": meta.get("duration", ""),
+            "upload_date": meta.get("upload_date", ""),
+            "description": meta.get("description", ""),
+            "tags": meta.get("tags", []),
+            "genre": meta.get("genre", ""),
         }
-        for item in items
+        for video in videos
     }
+
 
 async def aget_youtube_video_suggestions(update: GetYoutubeLinkArgs) -> dict:
     update = GetYoutubeLinkArgs(**update)
@@ -99,21 +98,32 @@ def throttle(val: any, *, ms: int, idx: int=1) -> any:
 
 def _get_ids_videos_for_query(query: str, n=10) -> list[str]:
     results = aiotube.Search.videos(query, limit=n)
-    return [throttle(AiotubeVideo(res), ms=100, idx=i) for i, res in enumerate(results)]
+    return [throttle(AiotubeVideo(res), ms=10, idx=i) for i, res in enumerate(results)]
 
 
-def _get_video_info_from_query(query: str) -> dict:
-    videos = _get_ids_videos_for_query(query)
-    return _extract_relevant_info(videos)
+async def _get_video_info_from_query(query: str) -> dict:
+    return  await search_videos_with_metadata(
+        query,
+        fields=[
+            "id",
+            "title",
+            "views",
+            "duration",
+            "upload_date",
+            "description",
+            "tags",
+            "genre",
+        ],
+    )
 
 
-def get_youtube_video_suggestions(update: GetYoutubeLinkArgs) -> dict:
+async def get_youtube_video_suggestions(update: GetYoutubeLinkArgs) -> dict:
     update = GetYoutubeLinkArgs(**update)
-    return [_get_video_info_from_query(query) for query in update.queries]
+    return [await _get_video_info_from_query(query) for query in update.queries]
 
 
 youtubeLinkTool = StructuredTool.from_function(
-    func=get_youtube_video_suggestions,
+    coroutine=get_youtube_video_suggestions,
     name="GetYoutubeLink",
     description="Get YouTube links from search queries",
     args_schema=GetYoutubeLinkArgs,
