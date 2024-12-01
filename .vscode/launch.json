@@ -12,7 +12,8 @@
             "args": [
                 "src/salon/chat/main.py"
             ],
-            "jinja": true
+            "jinja": true,
+            "justMyCode": false
         }
     ]
 }

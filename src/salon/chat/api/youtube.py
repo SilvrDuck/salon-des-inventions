@@ -1,8 +1,9 @@
 import asyncio
+import time
 
 import aiotube
 import httpx
-from aiotube.videos import Video as AiotubeVideo
+from aiotube.video import Video as AiotubeVideo
 from langchain_core.tools import StructuredTool
 from pydantic import BaseModel, Field
 
@@ -10,7 +11,8 @@ from salon.config import config
 
 YT_API = "https://www.googleapis.com/youtube/v3/"
 class GetYoutubeLinkArgs(BaseModel):
-    queries: list[str] = Field(description="List of YouTube search queries")
+    _max_queries = 6
+    queries: list[str] = Field(description=f"List of YouTube search queries, max {_max_queries} queries", max_items=_max_queries)
 
 class VideoId(BaseModel):
     video_id: str = Field(description="YouTube video id, e.g. 'dQw4w9WgXcQ'")
@@ -88,9 +90,16 @@ async def aget_youtube_video_suggestions(update: GetYoutubeLinkArgs) -> dict:
     return await asyncio.gather(*tasks)
 
 
+def throttle(val: any, *, ms: int, idx: int=1) -> any:
+    """Slows down requests to the YouTube API to avoid rate limiting,
+    idx allows to skip waiting for the first request"""
+    if idx > 0:
+        time.sleep(ms / 1000)
+    return val
+
 def _get_ids_videos_for_query(query: str, n=10) -> list[str]:
-    results = aiotube.Search.videos(query, max_results=n)
-    return [aiotube.videos.Video(res) for res in results]
+    results = aiotube.Search.videos(query, limit=n)
+    return [throttle(AiotubeVideo(res), ms=100, idx=i) for i, res in enumerate(results)]
 
 
 def _get_video_info_from_query(query: str) -> dict:
@@ -100,12 +109,11 @@ def _get_video_info_from_query(query: str) -> dict:
 
 def get_youtube_video_suggestions(update: GetYoutubeLinkArgs) -> dict:
     update = GetYoutubeLinkArgs(**update)
-
     return [_get_video_info_from_query(query) for query in update.queries]
 
 
 youtubeLinkTool = StructuredTool.from_function(
-    coroutine=get_youtube_video_suggestions,
+    func=get_youtube_video_suggestions,
     name="GetYoutubeLink",
     description="Get YouTube links from search queries",
     args_schema=GetYoutubeLinkArgs,
