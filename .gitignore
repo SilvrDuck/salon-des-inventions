@@ -9,6 +9,9 @@ __pycache__/
 crx/*
 !crx/README.md
 
+bin/
+
+
 playground.ipynb
 
 # C extensions

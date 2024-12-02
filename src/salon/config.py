@@ -2,6 +2,10 @@ from pydantic_settings import BaseSettings
 
 
 class Config(BaseSettings):
+
+    # MQTT
+    mqtt_host: str = "localhost"
+    mqtt_port: int = 1883
     
     # Auto consumed by langchain
     langchain_tracing_v2: str = "__set_in_dotenv__"

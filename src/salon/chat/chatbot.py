@@ -2,8 +2,8 @@ import asyncio
 from langchain_core.messages import ChatMessage
 from langchain_openai import ChatOpenAI
 
-from salon.chat.api.led import ledUpdateTool
-from salon.chat.api.youtube import VideoIdList, youtubeLinkTool
+from salon.chat.led.led_tool import ledUpdateTool
+from salon.chat.youtube.yt_tool import VideoIdList, youtubeLinkTool
 from salon.chat.prompts import (
     LED_SUBSYSTEM,
     YOUTUBE_SELECTOR_SUBSUBSYSTEM,
@@ -17,7 +17,7 @@ llm = ChatOpenAI(model="gpt-4o", api_key=config.openai_api_key)
 llm_tools = llm.bind_tools([ledUpdateTool], tool_choice=ledUpdateTool.name)
 llm_youtube = llm.bind_tools([youtubeLinkTool], tool_choice=youtubeLinkTool.name)
 
-led_chain = llm_tools | (lambda x: x.tool_calls[0]["args"]) | ledUpdateTool.func
+led_chain = llm_tools | (lambda x: x.tool_calls[0]["args"]) | ledUpdateTool.coroutine
 youtube_chain = llm_youtube | (lambda x: x.tool_calls[0]["args"]) | youtubeLinkTool.coroutine
 llm_youtube_id = llm.with_structured_output(VideoIdList)
 

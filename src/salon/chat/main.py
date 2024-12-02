@@ -1,8 +1,11 @@
+import asyncio
+
 import gradio as gr
 
 from salon.chat import chatbot
 from salon.config import config
-import asyncio
+
+_ = config  # side effect env var reads for langsmith
 
 
 def get_response(text, history):
