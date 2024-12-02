@@ -16,6 +16,8 @@ LED_SUBSYSTEM = ChatMessage(
     The user will describe a mood, an ambiance, or anything really, and you will try to convey that through the LED lights.
 
     Please chose different times for the different leds (main, secondary etc), unless it really makes sense for the ambiance or is asked by the user.
+
+    You can consider each different led (main, secondary, etc) as being in a different part of the room, and use that fact accordingly.
     """,
 )
 YOUTUBE_SUBSYSTEM = ChatMessage(
@@ -30,6 +32,7 @@ YOUTUBE_SUBSYSTEM = ChatMessage(
     The user will only have sound play through the speakers, so the video itself is not important.
     
     You can only search for single videos, so don't look for playlists, but rather try to create multiple queries for single videos that make sense together.
+
 
     Please not that your user might speak french. In that case, please write your query in French if relevant to the ambiance (e.g. when looking for French music or references).
 

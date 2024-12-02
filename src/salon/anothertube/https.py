@@ -1,6 +1,9 @@
-import httpx
 from urllib.error import HTTPError
-from salon.anothertube.errors import TooManyRequests, InvalidURL, AIOError
+
+import httpx
+
+from salon.anothertube.errors import AIOError, InvalidURL, TooManyRequests
+
 
 async def request(url: str):
     headers = {

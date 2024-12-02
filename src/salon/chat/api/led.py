@@ -6,8 +6,11 @@ from langchain_core.tools import StructuredTool
 
 
 
+from enum import Enum
+
+raise NotImplementedError("support other colors properly")
 class LedColor(Enum):
-    # native for strips
+    # Native colors for strips
     red = "red"
     green = "green"
     blue = "blue"
@@ -16,14 +19,42 @@ class LedColor(Enum):
     purple = "purple"
     yellow = "yellow"
     cyan = "cyan"
-    # others
+    # Others mapped to native colors
     pink = "pink"
+    orange = "orange"
+    brown = "brown"
+    grey = "grey"
+    magenta = "magenta"
+    turquoise = "turquoise"
+    gold = "gold"
+    silver = "silver"
+    violet = "violet"
+    indigo = "indigo"
+    maroon = "maroon"
+    olive = "olive"
+    lime = "lime"
+    teal = "teal"
+    navy = "navy"
+    beige = "beige"
+    lavender = "lavender"
+    peach = "peach"
+    coral = "coral"
+    aqua = "aqua"
+    khaki = "khaki"
+    chartreuse = "chartreuse"
+    amber = "amber"
+    fuchsia = "fuchsia"
+    periwinkle = "periwinkle"
+    burgundy = "burgundy"
+    salmon = "salmon"
+    tan = "tan"
+    sienna = "sienna"
 
 
 class ColorTime(BaseModel):
     color: LedColor = Field(description="Color to display. Use 'black' to turn off the LED.")
     time: int = Field(description="Time in milliseconds to display color. Must be greater than 0.")
-    transation: Literal["solid", "fade"] = Field(description="Type of transition to use. 'solid' will instantly change to the color, 'fade' will fade to the color over the specified time.")
+    transition: Literal["solid", "fade"] = Field(description="Type of transition to use. 'solid' will instantly change to the color, 'fade' will fade to the color over the specified time.")
 
 class ColorPattern(BaseModel):
     colors: list[ColorTime] = Field(description=(
