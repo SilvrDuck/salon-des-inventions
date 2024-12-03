@@ -12,8 +12,16 @@ class PostLedUpdateArgs(BaseModel):
     secondary_led: ColorPattern = Field(description="Secondary LED")
     ambient_led: ColorPattern = Field(description="Ambient LED")
 
-async def post_led_update(update: PostLedUpdateArgs) -> str:
-    update = PostLedUpdateArgs(**update)
+    @staticmethod
+    def with_safe_colors(update: dict) -> "PostLedUpdateArgs":
+        # The llm is very dumb and sometimes sends invalid colors
+        update["main_led"] = ColorPattern.with_safe_colors(update["main_led"])
+        update["secondary_led"] = ColorPattern.with_safe_colors(update["secondary_led"])
+        update["ambient_led"] = ColorPattern.with_safe_colors(update["ambient_led"])
+        return PostLedUpdateArgs(**update)
+
+async def post_led_update(update: dict) -> str:
+    update = PostLedUpdateArgs.with_safe_colors(update)
 
     await asyncio.gather(
         set_led(LedClass.main, update.main_led),

@@ -27,7 +27,7 @@ async def _get_video_info_from_query(query: str) -> dict:
         ],
     )
 
-async def get_youtube_video_suggestions(update: YoutubeSuggestionsArgs) -> dict:
+async def get_youtube_video_suggestions(update: dict) -> dict:
     update = YoutubeSuggestionsArgs(**update)
     return await asyncio.gather(*(
             _get_video_info_from_query(query)
@@ -46,7 +46,7 @@ youtubeSuggestionsTool = StructuredTool.from_function(
 class PlayYoutubeArgs(BaseModel):
     video_ids: list[VideoId] = Field(description="List of YouTube video ids")
 
-async def play_youtube_videos(update: PlayYoutubeArgs) -> str:
+async def play_youtube_videos(update: dict) -> str:
     update = PlayYoutubeArgs(**update)
     video_ids = [vid.video_id for vid in update.video_ids]
     await play_videos(video_ids)

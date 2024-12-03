@@ -46,5 +46,7 @@ YOUTUBE_SELECTOR_SUBSUBSYSTEM = ChatMessage(
     Please return a list of videoId for all the videos you think are relevant. In the case of music songs, please do not put two times the same song in the list (including any variations), unless it is explicitely asked by the user.
 
     Please sort them by putting first the best one according to the query.
+
+    Please avoid videos that are too short, too long, or not relevant to the query. For example unless asked, do not keep shorts (less than 1 minute) or long videos (more than 10 minutes) in the list.
     """,
 )

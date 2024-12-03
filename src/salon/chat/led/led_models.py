@@ -1,8 +1,9 @@
 
 
-from typing import Literal
-from pydantic import BaseModel, Field
 from enum import Enum
+from typing import Literal
+
+from pydantic import BaseModel, Field
 
 
 class LedClass(Enum):
@@ -11,7 +12,6 @@ class LedClass(Enum):
     ambient = "ambient"
 
 class LedColor(Enum):
-    # Native colors for strips
     red = "red"
     green = "green"
     blue = "blue"
@@ -20,47 +20,28 @@ class LedColor(Enum):
     purple = "purple"
     yellow = "yellow"
     cyan = "cyan"
-    # Others, to be mapped
-    pink = "pink"
-    orange = "orange"
-    brown = "brown"
-    grey = "grey"
-    magenta = "magenta"
-    turquoise = "turquoise"
-    gold = "gold"
-    silver = "silver"
-    violet = "violet"
-    indigo = "indigo"
-    maroon = "maroon"
-    olive = "olive"
-    lime = "lime"
-    teal = "teal"
-    navy = "navy"
-    beige = "beige"
-    lavender = "lavender"
-    amber = "amber"
-    fuchsia = "fuchsia"
 
-    def to_api_color(self) -> str:
-        match self:
-            case LedColor.red | LedColor.magenta | LedColor.brown | LedColor.maroon:
-                return "red"
-            case LedColor.green | LedColor.olive | LedColor.lime:
-                return "green"
-            case LedColor.blue | LedColor.navy:
-                return "blue"
-            case LedColor.black:
-                return "black"
-            case LedColor.white | LedColor.grey | LedColor.silver | LedColor.beige:
-                return "white"
-            case LedColor.purple | LedColor.violet | LedColor.indigo | LedColor.lavender | LedColor.pink  | LedColor.fuchsia:
-                return "purple"
-            case LedColor.yellow | LedColor.orange | LedColor.gold | LedColor.amber:
-                return "yellow"
-            case LedColor.cyan | LedColor.turquoise | LedColor.teal:
-                return "cyan"
+    @staticmethod
+    def with_safe_color(color: str) -> "LedColor":
+        match color:
+            case "red" | "magenta" | "brown" | "maroon":
+                return LedColor.red
+            case "green" | "olive" | "lime":
+                return LedColor.green
+            case "blue" | "navy":
+                return LedColor.blue
+            case "black":
+                return LedColor.black
+            case "white" | "grey" | "silver" | "beige":
+                return LedColor.white
+            case "purple" | "violet" | "indigo" | "lavender" | "pink"  | "fuchsia":
+                return LedColor.purple
+            case "yellow" | "orange" | "gold" | "amber":
+                return LedColor.yellow
+            case "cyan" | "turquoise" | "teal":
+                return LedColor.cyan
             case _:
-                raise ValueError(f"Color {self.name} not mapped to an API color")
+                raise ValueError(f"Color {color} cannot be safely mapped to a native color")
 
 
 class ColorTime(BaseModel):
@@ -68,8 +49,13 @@ class ColorTime(BaseModel):
     time: int = Field(description="Time in milliseconds to display color. Must be greater than 0.")
     transition: Literal["solid", "fade"] = Field(description="Type of transition to use. 'solid' will instantly change to the color, 'fade' will fade to the color over the specified time.")
 
+    @staticmethod
+    def with_safe_colors(update: dict) -> "ColorTime":
+        update["color"] = LedColor.with_safe_color(update["color"])
+        return ColorTime(**update)
+
     def to_mqtt(self) -> str:
-        return "|".join((self.color.to_api_color(), str(self.time), self.transition))
+        return "|".join((self.color.value, str(self.time), self.transition))
 
 
 class ColorPattern(BaseModel):
@@ -78,6 +64,11 @@ class ColorPattern(BaseModel):
         "displaying each color for the specified time. "
         "Time does not matter for a list of length 1."
     ))
+
+    @staticmethod
+    def with_safe_colors(update: dict) -> "ColorPattern":
+        update["colors"] = [ColorTime.with_safe_colors(c) for c in update["colors"]]
+        return ColorPattern(**update)
 
     def to_mqtt(self) -> str:
         return ";".join((c.to_mqtt() for c in self.colors))
