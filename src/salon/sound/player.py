@@ -1,107 +1,97 @@
 import threading
-import time
+from pathlib import Path
+from functools import wraps
 
 from selenium import webdriver
+from selenium.common.exceptions import WebDriverException, NoSuchWindowException
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from pathlib import Path
 
 PROJ_DIR = Path(__file__).resolve().parent.parent.parent.parent
 
-browser = None
+def ensure_browser(func):
+    @wraps(func)
+    def wrapper(self, *args, **kwargs):
+        try:
+            return func(self, *args, **kwargs)
+        except (NoSuchWindowException, WebDriverException) as e:
+            print(f"Browser exception in {func.__name__}: {e}")
+            with self.lock:
+                self.stop()
+                self._initialize_browser()
+            return func(self, *args, **kwargs)
+    return wrapper
 
-def close_extra_tabs():
-    global browser
-    try:
-        original_tab = browser.window_handles[0]
-        for handle in browser.window_handles[1:]:
-            browser.switch_to.window(handle)
-            browser.close()
-        browser.switch_to.window(original_tab)
-        print("Extra tabs closed.")
-    except Exception as e:
-        print("Error while closing extra tabs:", e)
+class Player:
+    def __init__(self):
+        self.browser = None
+        self.lock = threading.RLock()
 
-def accept_cookies():
-    global browser
-    try:
-        wait = WebDriverWait(browser, 15)
-        accept_button = wait.until(EC.element_to_be_clickable((
-            By.XPATH, "//button[@aria-label='Accept the use of cookies and other data for the purposes described']"
-        )))
-        accept_button.click()
-        print("Cookies accepted.")
-    except Exception as e:
-        print("No 'Accept All' button found or another issue occurred:", e)
+    def _initialize_browser(self):
+        ublock_path = PROJ_DIR / "crx/ublock.crx"
+        sponsorblock_path = PROJ_DIR / "crx/sponsorblock.crx"
 
-def enable_loop():
-    global browser
-    from selenium.common.exceptions import (
-        StaleElementReferenceException,
-        NoSuchElementException,
-        TimeoutException,
-    )
-    try:
-        wait = WebDriverWait(browser, 15)
-        loop_button_xpath = "//button[@aria-label='Loop playlist']"
+        chrome_options = Options()
+        chrome_options.add_argument("--start-maximized")
+        chrome_options.add_argument("--disable-infobars")
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_extension(str(ublock_path))
+        chrome_options.add_extension(str(sponsorblock_path))
 
-        for attempt in range(5):
-            try:
-                loop_button = wait.until(EC.element_to_be_clickable((
-                    By.XPATH, loop_button_xpath
-                )))
-                loop_button.click()
-                print("Loop enabled via loop button.")
-                break
-            except (StaleElementReferenceException, NoSuchElementException) as e:
-                print(f"Attempt {attempt + 1}: Element not found or stale. Retrying...")
-                time.sleep(1)
-        else:
-            print("Failed to enable loop after multiple attempts.")
-    except TimeoutException:
-        print("Loop button not found within the timeout period.")
-    except Exception as e:
-        print("Could not enable loop due to an unexpected error:", e)
-        import traceback
-        traceback.print_exc()
+        self.browser = webdriver.Chrome(options=chrome_options)
 
-def play(video_ids):
-    global browser
+    def _is_browser_valid(self):
+        if self.browser is None:
+            return False
+        try:
+            self.browser.current_window_handle
+            return True
+        except (NoSuchWindowException, WebDriverException):
+            return False
 
-    ublock_path = PROJ_DIR / "crx/ublock.crx"
-    sponsorblock_path = PROJ_DIR / "crx/sponsorblock.crx"
-    print(ublock_path)
-    chrome_options = Options()
-    chrome_options.add_argument("--start-maximized")
-    chrome_options.add_argument("--disable-infobars")
-    chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_extension(ublock_path)
-    chrome_options.add_extension(sponsorblock_path)
+    @ensure_browser
+    def _accept_cookies(self):
+        try:
+            wait = WebDriverWait(self.browser, 15)
+            accept_button = wait.until(EC.element_to_be_clickable((
+                By.XPATH, "//button[@aria-label='Accept the use of cookies and other data for the purposes described']"
+            )))
+            accept_button.click()
+            print("Cookies accepted.")
+        except Exception as e:
+            print("No 'Accept All' button found or another issue occurred:", e)
 
-    browser = webdriver.Chrome(options=chrome_options)
+    @ensure_browser
+    def _enable_loop(self):
+        try:
+            wait = WebDriverWait(self.browser, 15)
+            loop_button_xpath = "//button[@aria-label='Loop playlist']"
+            loop_button = wait.until(EC.element_to_be_clickable((By.XPATH, loop_button_xpath)))
+            loop_button.click()
+            print("Loop enabled via loop button.")
+        except Exception as e:
+            print("Could not enable loop:", e)
 
-    close_extra_tabs()
+    @ensure_browser
+    def _navigate_to_playlist(self, playlist_url):
+        self.browser.get(playlist_url)
+        print("Navigated to new playlist URL.")
+        self._accept_cookies()
+        self._enable_loop()
 
-    playlist_url = "https://www.youtube.com/watch_videos?video_ids=" + ",".join(video_ids)
-    browser.get(playlist_url)
+    def play(self, video_ids):
+        with self.lock:
+            playlist_url = "https://www.youtube.com/watch_videos?video_ids=" + ",".join(video_ids)
+            if not self._is_browser_valid():
+                self.stop()
+                self._initialize_browser()
+            threading.Thread(target=self._navigate_to_playlist, args=(playlist_url,)).start()
 
-    accept_cookies()
-    enable_loop()
-
-def stop():
-    global browser
-    if browser:
-        browser.quit()
-        browser = None
-
-if __name__ == "__main__":
-    video_ids = ["dQw4w9WgXcQ", "kJQP7kiw5Fk"]
-    play_thread = threading.Thread(target=play, args=(video_ids,))
-    play_thread.start()
-
-    time.sleep(600)
-    stop()
-    play_thread.join()
+    def stop(self):
+        with self.lock:
+            if self.browser:
+                self.browser.quit()
+                self.browser = None
+                print("Browser stopped.")

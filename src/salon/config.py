@@ -2,6 +2,8 @@ from pydantic_settings import BaseSettings
 
 
 class Config(BaseSettings):
+    # Sound player
+    sound_player_connection: str = "http://localhost:8000"
 
     # MQTT
     mqtt_host: str = "localhost"

@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:d925d257f9327deeccc2cfc5ce6bef203e6257571e26e73da464ac9b2bf439fc"
+content_hash = "sha256:5f8fcf03757452497b63291ca2981a37eb3407ce10bcb08ed5945c343abe68b2"
 
 [[metadata.targets]]
 requires_python = "==3.13.*"
@@ -72,7 +72,7 @@ name = "aiomqtt"
 version = "2.3.0"
 requires_python = "<4.0,>=3.8"
 summary = "The idiomatic asyncio MQTT client, wrapped around paho-mqtt"
-groups = ["default"]
+groups = ["default", "dev"]
 dependencies = [
     "paho-mqtt<3.0.0,>=2.1.0",
     "typing-extensions<5.0.0,>=4.4.0; python_version < \"3.10\"",
@@ -94,20 +94,6 @@ dependencies = [
 files = [
     {file = "aiosignal-1.3.1-py3-none-any.whl", hash = "sha256:f8376fb07dd1e86a584e4fcdec80b36b7f81aac666ebc724e2c090300dd83b17"},
     {file = "aiosignal-1.3.1.tar.gz", hash = "sha256:54cd96e15e1649b75d6c87526a6ff0b6c1b0dd3459f43d9ca11d48c339b68cfc"},
-]
-
-[[package]]
-name = "aiotube"
-version = "1.7.2"
-requires_python = ">=3.8.0"
-summary = "Access YouTube Public Data without YouTube API"
-groups = ["default", "dev"]
-dependencies = [
-    "urllib3",
-]
-files = [
-    {file = "aiotube-1.7.2-py3-none-any.whl", hash = "sha256:c3cd55a8ddea17d15b6a45e44a19f9e342b8cc2801cf757ba20aea478c0aca41"},
-    {file = "aiotube-1.7.2.tar.gz", hash = "sha256:398201e751323d690f600ca6493ddbedceda3864b22f4177dc69b80d29cd9e8a"},
 ]
 
 [[package]]
@@ -892,7 +878,7 @@ name = "paho-mqtt"
 version = "2.1.0"
 requires_python = ">=3.7"
 summary = "MQTT version 5.0/3.1.1 client class"
-groups = ["default"]
+groups = ["default", "dev"]
 files = [
     {file = "paho_mqtt-2.1.0-py3-none-any.whl", hash = "sha256:6db9ba9b34ed5bc6b6e3812718c7e06e2fd7444540df2455d2c51bd58808feee"},
     {file = "paho_mqtt-2.1.0.tar.gz", hash = "sha256:12d6e7511d4137555a3f6ea167ae846af2c7357b10bc6fa4f7c3968fc1723834"},
@@ -1306,7 +1292,7 @@ path = "./."
 summary = "Default template for PDM package"
 groups = ["dev"]
 dependencies = [
-    "aiotube>=1.7.2",
+    "aiomqtt>=2.3.0",
     "gradio>=5.6.0",
     "httpx>=0.28.0",
     "langchain-openai>=0.2.9",
