@@ -13,4 +13,4 @@ TOPICS = {
 
 async def set_led(target: LedClass, color_pattern: ColorPattern) -> None:
     async with MQTT(config.mqtt_host, config.mqtt_port) as client:
-        await client.publish(TOPICS[target], color_pattern.to_mqtt())
+        await client.publish(TOPICS[target], color_pattern.to_mqtt(), retain=True)
