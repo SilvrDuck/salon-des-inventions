@@ -376,7 +376,7 @@ files = [
 
 [[package]]
 name = "gradio"
-version = "5.6.0"
+version = "5.8.0"
 requires_python = ">=3.10"
 summary = "Python library for easily interacting with trained machine learning models"
 groups = ["default", "dev"]
@@ -386,7 +386,7 @@ dependencies = [
     "audioop-lts<1.0; python_version >= \"3.13\"",
     "fastapi<1.0,>=0.115.2",
     "ffmpy",
-    "gradio-client==1.4.3",
+    "gradio-client==1.5.1",
     "httpx>=0.24.1",
     "huggingface-hub>=0.25.1",
     "jinja2<4.0",
@@ -398,25 +398,25 @@ dependencies = [
     "pillow<12.0,>=8.0",
     "pydantic>=2.0",
     "pydub",
-    "python-multipart==0.0.12",
+    "python-multipart>=0.0.18",
     "pyyaml<7.0,>=5.0",
     "ruff>=0.2.2; sys_platform != \"emscripten\"",
-    "safehttpx<1.0,>=0.1.1",
+    "safehttpx<0.2.0,>=0.1.6",
     "semantic-version~=2.0",
     "starlette<1.0,>=0.40.0; sys_platform != \"emscripten\"",
-    "tomlkit==0.12.0",
+    "tomlkit<0.14.0,>=0.12.0",
     "typer<1.0,>=0.12; sys_platform != \"emscripten\"",
     "typing-extensions~=4.0",
     "urllib3~=2.0; sys_platform == \"emscripten\"",
     "uvicorn>=0.14.0; sys_platform != \"emscripten\"",
 ]
 files = [
-    {file = "gradio-5.6.0-py3-none-any.whl", hash = "sha256:6eba135b32fb2fcb5d83fa845f6ad57c033894d5218fd3010de8fb4d735b9b6d"},
+    {file = "gradio-5.8.0-py3-none-any.whl", hash = "sha256:428ad660fc48104f0c60f8ae808ab5e2afec03a472a0fb734348c4e916de74dc"},
 ]
 
 [[package]]
 name = "gradio-client"
-version = "1.4.3"
+version = "1.5.1"
 requires_python = ">=3.10"
 summary = "Python library for easily interacting with trained machine learning models"
 groups = ["default", "dev"]
@@ -426,11 +426,11 @@ dependencies = [
     "huggingface-hub>=0.19.3",
     "packaging",
     "typing-extensions~=4.0",
-    "websockets<13.0,>=10.0",
+    "websockets<15.0,>=10.0",
 ]
 files = [
-    {file = "gradio_client-1.4.3-py3-none-any.whl", hash = "sha256:a76990277cab011f1c49391bdf33670bbbbb32b3503971ae5d91281e7946bdc1"},
-    {file = "gradio_client-1.4.3.tar.gz", hash = "sha256:55fd446ae80a5320f164b6913e8862b398fca9097d33b76bd98efb61cbd449c3"},
+    {file = "gradio_client-1.5.1-py3-none-any.whl", hash = "sha256:175e4ac399591d919af85a097661cdd760b8dd1ca229e28ef4da978fde84a398"},
+    {file = "gradio_client-1.5.1.tar.gz", hash = "sha256:c443013e3532828e202c9679b254016406a1753666c3c601ea8557c724adbaf7"},
 ]
 
 [[package]]
@@ -477,17 +477,6 @@ dependencies = [
 files = [
     {file = "httpx-0.28.0-py3-none-any.whl", hash = "sha256:dc0b419a0cfeb6e8b34e85167c0da2671206f5095f1baa9663d23bcfd6b535fc"},
     {file = "httpx-0.28.0.tar.gz", hash = "sha256:0858d3bab51ba7e386637f22a61d8ccddaeec5f3fe4209da3a6168dbb91573e0"},
-]
-
-[[package]]
-name = "httpx-sse"
-version = "0.4.0"
-requires_python = ">=3.8"
-summary = "Consume Server-Sent Event (SSE) messages with HTTPX."
-groups = ["default", "dev"]
-files = [
-    {file = "httpx-sse-0.4.0.tar.gz", hash = "sha256:1e81a3a3070ce322add1d3529ed42eb5f70817f45ed6ec915ab753f961139721"},
-    {file = "httpx_sse-0.4.0-py3-none-any.whl", hash = "sha256:f329af6eae57eaa2bdfd962b42524764af68075ea87370a2de920af5341e318f"},
 ]
 
 [[package]]
@@ -584,7 +573,7 @@ files = [
 
 [[package]]
 name = "langchain"
-version = "0.3.7"
+version = "0.3.9"
 requires_python = "<4.0,>=3.9"
 summary = "Building applications with LLMs through composability"
 groups = ["default", "dev"]
@@ -593,23 +582,23 @@ dependencies = [
     "SQLAlchemy<3,>=1.4",
     "aiohttp<4.0.0,>=3.8.3",
     "async-timeout<5.0.0,>=4.0.0; python_version < \"3.11\"",
-    "langchain-core<0.4.0,>=0.3.15",
+    "langchain-core<0.4.0,>=0.3.21",
     "langchain-text-splitters<0.4.0,>=0.3.0",
     "langsmith<0.2.0,>=0.1.17",
-    "numpy<2,>=1; python_version < \"3.12\"",
-    "numpy<2.0.0,>=1.26.0; python_version >= \"3.12\"",
+    "numpy<2,>=1.22.4; python_version < \"3.12\"",
+    "numpy<3,>=1.26.2; python_version >= \"3.12\"",
     "pydantic<3.0.0,>=2.7.4",
     "requests<3,>=2",
     "tenacity!=8.4.0,<10,>=8.1.0",
 ]
 files = [
-    {file = "langchain-0.3.7-py3-none-any.whl", hash = "sha256:cf4af1d5751dacdc278df3de1ff3cbbd8ca7eb55d39deadccdd7fb3d3ee02ac0"},
-    {file = "langchain-0.3.7.tar.gz", hash = "sha256:2e4f83bf794ba38562f7ba0ede8171d7e28a583c0cec6f8595cfe72147d336b2"},
+    {file = "langchain-0.3.9-py3-none-any.whl", hash = "sha256:ade5a1fee2f94f2e976a6c387f97d62cc7f0b9f26cfe0132a41d2bda761e1045"},
+    {file = "langchain-0.3.9.tar.gz", hash = "sha256:4950c4ad627d0aa95ce6bda7de453e22059b7e7836b562a8f781fb0b05d7294c"},
 ]
 
 [[package]]
 name = "langchain-core"
-version = "0.3.19"
+version = "0.3.21"
 requires_python = "<4.0,>=3.9"
 summary = "Building applications with LLMs through composability"
 groups = ["default", "dev"]
@@ -624,24 +613,24 @@ dependencies = [
     "typing-extensions>=4.7",
 ]
 files = [
-    {file = "langchain_core-0.3.19-py3-none-any.whl", hash = "sha256:562b7cc3c15dfaa9270cb1496990c1f3b3e0b660c4d6a3236d7f693346f2a96c"},
-    {file = "langchain_core-0.3.19.tar.gz", hash = "sha256:126d9e8cadb2a5b8d1793a228c0783a3b608e36064d5a2ef1a4d38d07a344523"},
+    {file = "langchain_core-0.3.21-py3-none-any.whl", hash = "sha256:7e723dff80946a1198976c6876fea8326dc82566ef9bcb5f8d9188f738733665"},
+    {file = "langchain_core-0.3.21.tar.gz", hash = "sha256:561b52b258ffa50a9fb11d7a1940ebfd915654d1ec95b35e81dfd5ee84143411"},
 ]
 
 [[package]]
 name = "langchain-openai"
-version = "0.2.9"
+version = "0.2.11"
 requires_python = "<4.0,>=3.9"
 summary = "An integration package connecting OpenAI and LangChain"
 groups = ["default", "dev"]
 dependencies = [
-    "langchain-core<0.4.0,>=0.3.17",
+    "langchain-core<0.4.0,>=0.3.21",
     "openai<2.0.0,>=1.54.0",
     "tiktoken<1,>=0.7",
 ]
 files = [
-    {file = "langchain_openai-0.2.9-py3-none-any.whl", hash = "sha256:2723015e56879f9e5edfcb175fdbec6c296c1b3bf65caad28579ce9c4d1bd652"},
-    {file = "langchain_openai-0.2.9.tar.gz", hash = "sha256:38a0f2004f17cdad622d46d4dcfb92d75adbf51909dadc76d0360dd94b0d4f70"},
+    {file = "langchain_openai-0.2.11-py3-none-any.whl", hash = "sha256:c019ae915a5782943bee9503388e65c8622d400e0451ef885f3e4989cf35727f"},
+    {file = "langchain_openai-0.2.11.tar.gz", hash = "sha256:563bd843092d260c7ffd88b8e0e6b830f36347e058e62a6d5e9cc4c461a8da98"},
 ]
 
 [[package]]
@@ -660,18 +649,18 @@ files = [
 
 [[package]]
 name = "langgraph"
-version = "0.2.53"
+version = "0.2.56"
 requires_python = "<4.0,>=3.9.0"
 summary = "Building stateful, multi-actor applications with LLMs"
 groups = ["default", "dev"]
 dependencies = [
     "langchain-core!=0.3.0,!=0.3.1,!=0.3.10,!=0.3.11,!=0.3.12,!=0.3.13,!=0.3.14,!=0.3.2,!=0.3.3,!=0.3.4,!=0.3.5,!=0.3.6,!=0.3.7,!=0.3.8,!=0.3.9,<0.4.0,>=0.2.43",
     "langgraph-checkpoint<3.0.0,>=2.0.4",
-    "langgraph-sdk<0.2.0,>=0.1.32",
+    "langgraph-sdk<0.2.0,>=0.1.42",
 ]
 files = [
-    {file = "langgraph-0.2.53-py3-none-any.whl", hash = "sha256:b34b67d0a12ae0ba6f03af97ad0f744bc609bd0328e8b734618cc039985cfdea"},
-    {file = "langgraph-0.2.53.tar.gz", hash = "sha256:b83232a04f2b536cbeac542f9ad7e0265f41ac6b7c6706ba8e031e0e80cb13a6"},
+    {file = "langgraph-0.2.56-py3-none-any.whl", hash = "sha256:ad8a4b772e34dc0137e890bb6ced596a39a1e684af66250c1e7c8150dbe90e9c"},
+    {file = "langgraph-0.2.56.tar.gz", hash = "sha256:af10b1ffd10d52fd4072a73f154b8c2513c0b22e5bd5d20f4567dfeecab98d1e"},
 ]
 
 [[package]]
@@ -691,18 +680,17 @@ files = [
 
 [[package]]
 name = "langgraph-sdk"
-version = "0.1.36"
+version = "0.1.43"
 requires_python = "<4.0.0,>=3.9.0"
 summary = "SDK for interacting with LangGraph API"
 groups = ["default", "dev"]
 dependencies = [
-    "httpx-sse>=0.4.0",
     "httpx>=0.25.2",
     "orjson>=3.10.1",
 ]
 files = [
-    {file = "langgraph_sdk-0.1.36-py3-none-any.whl", hash = "sha256:b11e1f0bc67631134d09d50c812dc73f9eb30394764ae1144d7d2a786a715355"},
-    {file = "langgraph_sdk-0.1.36.tar.gz", hash = "sha256:2a2c651b7851ba15aeaab7e4e3ea7fd8357ef1cb0b592f264916fa990cdda6e7"},
+    {file = "langgraph_sdk-0.1.43-py3-none-any.whl", hash = "sha256:b299dd091a7547dba0ffd041ccacadd1caeb57e0c52f2ccf80de64eac45f6e7a"},
+    {file = "langgraph_sdk-0.1.43.tar.gz", hash = "sha256:3df9c1bc946dcaf0e3e4453e51509166495e2ce1dcd2273426e22ff9317e64f5"},
 ]
 
 [[package]]
@@ -1010,7 +998,7 @@ files = [
 
 [[package]]
 name = "pydantic"
-version = "2.10.1"
+version = "2.10.3"
 requires_python = ">=3.8"
 summary = "Data validation using Python type hints"
 groups = ["default", "dev"]
@@ -1020,8 +1008,8 @@ dependencies = [
     "typing-extensions>=4.12.2",
 ]
 files = [
-    {file = "pydantic-2.10.1-py3-none-any.whl", hash = "sha256:a8d20db84de64cf4a7d59e899c2caf0fe9d660c7cfc482528e7020d7dd189a7e"},
-    {file = "pydantic-2.10.1.tar.gz", hash = "sha256:a4daca2dc0aa429555e0656d6bf94873a7dc5f54ee42b1f5873d666fb3f35560"},
+    {file = "pydantic-2.10.3-py3-none-any.whl", hash = "sha256:be04d85bbc7b65651c5f8e6b9976ed9c6f41782a55524cef079a34a0bb82144d"},
+    {file = "pydantic-2.10.3.tar.gz", hash = "sha256:cb5ac360ce894ceacd69c403187900a02c4b20b693a9dd1d643e1effab9eadf9"},
 ]
 
 [[package]]
@@ -1154,13 +1142,13 @@ files = [
 
 [[package]]
 name = "python-multipart"
-version = "0.0.12"
+version = "0.0.19"
 requires_python = ">=3.8"
 summary = "A streaming multipart parser for Python"
 groups = ["default", "dev"]
 files = [
-    {file = "python_multipart-0.0.12-py3-none-any.whl", hash = "sha256:43dcf96cf65888a9cd3423544dd0d75ac10f7aa0c3c28a175bbcd00c9ce1aebf"},
-    {file = "python_multipart-0.0.12.tar.gz", hash = "sha256:045e1f98d719c1ce085ed7f7e1ef9d8ccc8c02ba02b5566d5f7521410ced58cb"},
+    {file = "python_multipart-0.0.19-py3-none-any.whl", hash = "sha256:f8d5b0b9c618575bf9df01c684ded1d94a338839bdd8223838afacfb4bb2082d"},
+    {file = "python_multipart-0.0.19.tar.gz", hash = "sha256:905502ef39050557b7a6af411f454bc19526529ca46ae6831508438890ce12cc"},
 ]
 
 [[package]]
@@ -1295,16 +1283,16 @@ files = [
 
 [[package]]
 name = "safehttpx"
-version = "0.1.1"
-requires_python = ">=3.9"
+version = "0.1.6"
+requires_python = ">3.9"
 summary = "A small Python library created to help developers protect their applications from Server Side Request Forgery (SSRF) attacks."
 groups = ["default", "dev"]
 dependencies = [
     "httpx",
 ]
 files = [
-    {file = "safehttpx-0.1.1-py3-none-any.whl", hash = "sha256:1d93b64023c00d5c53ea70ea36e773b8a0dba5eaf1a1eb188856584a0a4cf4d1"},
-    {file = "safehttpx-0.1.1.tar.gz", hash = "sha256:6e1bedf7767213300da5e4cb7e823e98edc934f17ca192d2e585111a2b899149"},
+    {file = "safehttpx-0.1.6-py3-none-any.whl", hash = "sha256:407cff0b410b071623087c63dd2080c3b44dc076888d8c5823c00d1e58cb381c"},
+    {file = "safehttpx-0.1.6.tar.gz", hash = "sha256:b356bfc82cee3a24c395b94a2dbeabbed60aff1aa5fa3b5fe97c4f2456ebce42"},
 ]
 
 [[package]]

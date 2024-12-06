@@ -1,20 +1,46 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
+import asyncio
+from pydantic import BaseModel, ValidationError
 
+from salon.config import config
+from salon.sound.models import SOUND_TOPIC, PlayRequest, StopRequest
 from salon.sound.player import Player
+from aiomqtt import Client as MQTT, Message
 
-app = FastAPI()
+
 player = Player()
 
-class PlayRequest(BaseModel):
-    video_ids: list[str]
 
-@app.post("/play")
-def play_videos(play_request: PlayRequest):
-    player.play(play_request.video_ids)
-    return {"status": "playing"}
+def _as_model(message: str) -> BaseModel:
+    for model in [PlayRequest, StopRequest]:
+        try:
+            validated_data = model.model_validate_json(message)
+            return validated_data
+        except ValidationError:
+            pass  # If it doesn't match, move to the next model
+    raise ValueError("No matching model found")
 
-@app.post("/stop")
-def stop_videos():
-    player.stop()
-    return {"status": "stopped"}
+
+async def _on_mqtt_message(message: Message):
+    message = message.payload.decode("utf-8")
+    parsed_message = _as_model(message)
+    match parsed_message:
+        case PlayRequest(video_ids=video_ids):
+            player.play(video_ids)
+        case StopRequest(stop=True):
+            player.stop()
+
+
+async def main():
+    async with MQTT(config.mqtt_host, config.mqtt_port) as client:
+        print("Starting mqqtt")
+        await client.subscribe(SOUND_TOPIC)
+
+        async for message in client.messages:
+            try:
+                await _on_mqtt_message(message)
+            except Exception as err:
+                print(f"Error in mqtt message: {err}")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

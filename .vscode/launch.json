@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Chat Gradio",
+            "name": "Chat",
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/.venv/bin/gradio",
@@ -19,13 +19,12 @@
             "justMyCode": false
         },
         {
-            "name": "Sound Fastapi",
+            "name": "Sound",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/.venv/bin/uvicorn",
+            "program": "${workspaceFolder}/.venv/bin/python",
             "args": [
-                "salon.sound.main:app",
-                "--reload"
+                "src/salon/sound/main.py"
             ],
             "jinja": true,
             "justMyCode": false
