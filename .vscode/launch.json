@@ -8,10 +8,7 @@
             "name": "Chat",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/.venv/bin/gradio",
-            "args": [
-                "src/salon/chat/main.py"
-            ],
+            "program": "src/salon/chat/main.py",
             "env": {
                 "GRADIO_SERVER_NAME": "0.0.0.0"
             },
@@ -22,10 +19,7 @@
             "name": "Sound",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/.venv/bin/python",
-            "args": [
-                "src/salon/sound/main.py"
-            ],
+            "program": "src/salon/sound/main.py",
             "jinja": true,
             "justMyCode": false
         }

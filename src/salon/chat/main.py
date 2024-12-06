@@ -1,5 +1,3 @@
-import asyncio
-
 import gradio as gr
 
 from salon.chat import chatbot
@@ -18,6 +16,16 @@ TITLE = "Super Invention 3000™"
 theme = gr.Theme.from_hub("YTheme/Minecraft")
 css = "footer {visibility: hidden}"
 
+
+def register_submit_event(event):
+    """Deals with freezing the interface while the bot is thinking."""
+    (
+        event(fn=lambda: gr.update(interactive=False), inputs=None, outputs=btn)
+        .then(fn=get_response, inputs=textbox, outputs=textbox)
+        .then(fn=lambda: gr.update(interactive=True), inputs=None, outputs=btn)
+    )
+
+
 with gr.Blocks(title=TITLE, theme=theme, css=css) as demo:
 
     gr.Markdown(f"# {TITLE}")
@@ -29,11 +37,8 @@ with gr.Blocks(title=TITLE, theme=theme, css=css) as demo:
     )
     btn = gr.Button("C’est parti !", variant="primary")
 
-    btn.click(fn=lambda: gr.update(interactive=False), inputs=None, outputs=btn).then(
-        fn=get_response, inputs=textbox, outputs=textbox
-    ).then(fn=lambda: gr.update(interactive=True), inputs=None, outputs=btn)
+    # Apply the same chain to both button click and textbox submit
+    register_submit_event(btn.click)
+    register_submit_event(textbox.submit)
 
-
-demo.launch(
-    show_api=False,
-)
+demo.launch(show_api=False)
