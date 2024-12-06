@@ -1,5 +1,3 @@
-import asyncio
-
 import gradio as gr
 
 from salon.chat import chatbot
@@ -8,8 +6,8 @@ from salon.config import config
 _ = config  # side effect env var reads for langsmith
 
 
-def get_response(text):
-    response = asyncio.run(chatbot.get_response(text))
+async def get_response(text):
+    response = await chatbot.get_response(text)
     print(response)
     return None
 
