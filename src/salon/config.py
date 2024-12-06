@@ -2,9 +2,6 @@ from pydantic_settings import BaseSettings
 
 
 class Config(BaseSettings):
-    # Sound player
-    sound_player_connection: str = "http://localhost:8000"
-
     # MQTT
     mqtt_host: str = "localhost"
     mqtt_port: int = 1883
@@ -14,9 +11,6 @@ class Config(BaseSettings):
     langchain_endpoint: str = "__set_in_dotenv__"
     langchain_api_key: str = "__set_in_dotenv__"
     langchain_project: str = "__set_in_dotenv__"
-
-    # Youtube API
-    youtube_api_key: str = "__set_in_dotenv__"
 
     # Openai
     openai_api_key: str = "__set_in_dotenv__"

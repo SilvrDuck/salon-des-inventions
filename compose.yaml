@@ -3,6 +3,7 @@ services:
     image: eclipse-mosquitto
     ports:
       - "1883:1883"
+    restart: unless-stopped
     volumes:
       - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
 
@@ -10,6 +11,29 @@ services:
     image: terdia07/mqttui
     ports:
       - "8787:5000"
+    restart: unless-stopped
     environment:
       - MQTT_BROKER=mqtt
       - MQTT_PORT=1883
+
+  salon:
+    build: .
+    ports:
+      - "7860:7860"
+    restart: unless-stopped
+    depends_on:
+      - mqtt
+    environment:
+      MQTT_HOST: mqtt
+      MQTT_PORT: 1883
+      LANGCHAIN_TRACING_V2: ${LANGCHAIN_TRACING_V2}
+      LANGCHAIN_ENDPOINT: ${LANGCHAIN_ENDPOINT}
+      LANGCHAIN_API_KEY: ${LANGCHAIN_API_KEY}
+      LANGCHAIN_PROJECT: ${LANGCHAIN_PROJECT}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=web"
+      - "traefik.http.routers.invention.rule=Host(`invention.platal.ch`)"
+      - "traefik.http.routers.invention.entrypoints=websecure"
+      - "traefik.http.routers.invention.tls.certResolver=myresolver"
