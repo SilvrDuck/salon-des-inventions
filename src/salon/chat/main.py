@@ -41,4 +41,5 @@ with gr.Blocks(title=TITLE, theme=theme, css=css) as demo:
     register_submit_event(btn.click)
     register_submit_event(textbox.submit)
 
+print("Starting the invention...")
 demo.launch(show_api=False)

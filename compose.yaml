@@ -23,6 +23,9 @@ services:
     restart: unless-stopped
     depends_on:
       - mqtt
+    networks:
+      - web
+      - default
     environment:
       MQTT_HOST: mqtt
       MQTT_PORT: 1883
@@ -34,6 +37,10 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=web"
-      - "traefik.http.routers.invention.rule=Host(`invention.platal.ch`)"
-      - "traefik.http.routers.invention.entrypoints=websecure"
-      - "traefik.http.routers.invention.tls.certResolver=myresolver"
+      - "traefik.http.routers.salon.rule=Host(`invention.platal.ch`)"
+      - "traefik.http.routers.salon.entrypoints=websecure"
+      - "traefik.http.routers.salon.tls.certResolver=myresolver"
+
+networks:
+  web:
+    external: true
