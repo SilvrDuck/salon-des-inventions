@@ -1,5 +1,4 @@
 import httpx
-from urllib.error import HTTPError
 
 from salon.anothertube.errors import AIOError, InvalidURL, TooManyRequests
 
