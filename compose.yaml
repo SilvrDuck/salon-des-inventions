@@ -10,7 +10,7 @@ services:
   mqtt-ui:
     image: terdia07/mqttui
     ports:
-      - "8787:5000"
+      - "18787:5000"
     restart: unless-stopped
     environment:
       - MQTT_BROKER=mqtt
@@ -37,7 +37,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=web"
-      - "traefik.http.routers.salon.rule=Host(`invention.platal.ch`)"
+      - "traefik.http.routers.salon.rule=Host(`${PUBLIC_URL_SALON}`)"
       - "traefik.http.routers.salon.entrypoints=websecure"
       - "traefik.http.routers.salon.tls.certResolver=myresolver"
 
